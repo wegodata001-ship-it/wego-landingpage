@@ -1,4 +1,7 @@
-export const DEFAULT_LANDING_PROJECT_KEY = process.env.NEXT_PUBLIC_PROJECT_KEY ?? "demo";
+import { getActiveProjectKey } from "@/lib/project-isolation";
+
+/** ברירת מחדל לקישורים ול־API — NEXT_PUBLIC_PROJECT_KEY (ראה .env) */
+export const DEFAULT_LANDING_PROJECT_KEY = getActiveProjectKey();
 
 /** Shape passed from server → `Pricing` (serializable). */
 export type LandingPackageDTO = {

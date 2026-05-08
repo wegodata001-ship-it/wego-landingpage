@@ -47,7 +47,7 @@ function posterFallbackGradient(index: number): string {
   return `linear-gradient(165deg, hsla(${h}, 0.85) 0%, hsl(222, 47%, 11%) 48%, hsl(222, 40%, 8%) 100%)`;
 }
 
-function useReelPreviewMap(reels: MarketingReel[]) {
+function useReelPreviewMap(reels: MarketingReel[], projectKey: string) {
   const [map, setMap] = useState<Record<string, PreviewPayload>>({});
   const [loading, setLoading] = useState(true);
   const reelsKey = useMemo(() => reels.map((r) => r.permalink).join("|"), [reels]);
@@ -59,13 +59,16 @@ function useReelPreviewMap(reels: MarketingReel[]) {
     async function run() {
       setLoading(true);
       const list = reelsRef.current;
+      const pk = encodeURIComponent(projectKey);
       const entries = await Promise.all(
         list.map(async (r) => {
           if (r.previewVideoSrc || r.posterSrc) {
             return [r.permalink, { thumbnailUrl: null, videoUrl: null } satisfies PreviewPayload] as const;
           }
           try {
-            const res = await fetch(`/api/reels/preview?url=${encodeURIComponent(r.permalink)}`);
+            const res = await fetch(
+              `/api/reels/preview?project_key=${pk}&url=${encodeURIComponent(r.permalink)}`,
+            );
             const data = (await res.json()) as PreviewPayload;
             return [
               r.permalink,
@@ -84,7 +87,7 @@ function useReelPreviewMap(reels: MarketingReel[]) {
     return () => {
       cancelled = true;
     };
-  }, [reelsKey]);
+  }, [reelsKey, projectKey]);
 
   return { previewMap: map, previewsLoading: loading };
 }
@@ -297,14 +300,14 @@ function ReelCard({ reel, index, preview, previewPending, isActive, onOpen, disp
 }
 
 export function MarketingReelsShowcase({ reels = DEFAULT_MARKETING_REELS }: { reels?: MarketingReel[] }) {
-  const { t, locale } = useLandingI18n();
+  const { t, locale, projectKey } = useLandingI18n();
   const msgRoot = (locale === "ar" ? arMessages : heMessages) as Record<string, unknown>;
   const categories = useMemo(() => getStringArray(msgRoot, "reels.categories"), [msgRoot]);
 
   const [open, setOpen] = useState<MarketingReel | null>(null);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const { previewMap, previewsLoading } = useReelPreviewMap(reels);
+  const { previewMap, previewsLoading } = useReelPreviewMap(reels, projectKey);
 
   const close = useCallback(() => setOpen(null), []);
 

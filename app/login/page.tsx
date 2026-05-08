@@ -1,11 +1,12 @@
 "use client";
 
+import { getWegoBizDefaultUserId } from "@/lib/wego-env";
 import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [projectKey, setProjectKey] = useState("demo");
+  const [projectKey, setProjectKey] = useState(() => getWegoBizDefaultUserId());
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -13,7 +14,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    setProjectKey(params.get("project_key") || "demo");
+    setProjectKey(params.get("project_key")?.trim() || getWegoBizDefaultUserId());
   }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {

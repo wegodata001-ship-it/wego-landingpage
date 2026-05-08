@@ -22,9 +22,7 @@ export default async function LandingPageRoute({
 }) {
   const projectKey = resolveProjectKey(searchParams);
 
-  const site =
-    (await prisma.siteSettings.findFirst({ where: { id: projectKey } })) ??
-    (await prisma.siteSettings.findFirst({ where: { id: "default" } }));
+  const site = await prisma.siteSettings.findFirst({ where: { id: projectKey } });
 
   if (!site) {
     return (

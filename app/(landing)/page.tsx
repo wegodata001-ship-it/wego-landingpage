@@ -18,6 +18,7 @@ import { LandingI18nProvider } from "@/components/i18n/LandingI18nProvider";
 import type { AppLocale } from "@/lib/i18n/types";
 import { LOCALE_COOKIE } from "@/lib/i18n/types";
 import { loadLandingBundles } from "@/lib/load-landing-bundles";
+import { getActiveProjectKey } from "@/lib/project-isolation";
 import { getFallbackPackagesForSSR } from "@/components/landing/data";
 import type { LandingPackageDTO } from "@/components/landing/data";
 
@@ -61,9 +62,7 @@ export default async function LandingPage({
 }) {
   const fromQuery = searchParams?.project_key ?? searchParams?.projectId;
   const projectKey =
-    (typeof fromQuery === "string" && fromQuery.trim() ? fromQuery.trim() : null) ??
-    process.env.NEXT_PUBLIC_PROJECT_KEY ??
-    "demo";
+    (typeof fromQuery === "string" && fromQuery.trim() ? fromQuery.trim() : null) ?? getActiveProjectKey();
 
   const bundles = await loadLandingBundles(projectKey);
   const { packages: pricePackages, checkoutEnabled } = await loadPackagesForLanding(projectKey);

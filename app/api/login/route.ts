@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createAuthToken, createAuthCookieHeader, comparePasswords } from "@/lib/auth";
+import { resolveProjectKeyFromBody } from "@/lib/project-key";
 
 /** Alias for `/api/auth/login` — same behavior + optional project_key. */
 export async function POST(request: Request) {
   const body = await request.json();
   const email = String(body.email || "").trim().toLowerCase();
   const password = String(body.password || "").trim();
-  const projectKey = String(body.project_key ?? body.projectKey ?? "demo").trim();
+  const projectKey = resolveProjectKeyFromBody(body as Record<string, unknown>);
 
   if (!email || !password) {
     return NextResponse.json({ error: "Email and password are required." }, { status: 400 });

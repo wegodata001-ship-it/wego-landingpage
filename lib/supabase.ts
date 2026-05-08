@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { sanitizeProjectKeyForPath } from "@/lib/project-isolation";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -11,7 +12,9 @@ if (!supabaseUrl || !serviceRoleKey) {
 export const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
 
 export function getStoragePath(projectKey: string, filename: string) {
-  return `project_${projectKey}/images/${filename}`;
+  const safe = sanitizeProjectKeyForPath(projectKey);
+  const base = filename.replace(/^.*[/\\]/, "").replace(/[^a-zA-Z0-9._-]/g, "_");
+  return `project_${safe}/images/${base}`;
 }
 
 export async function uploadProjectImage(projectKey: string, file: Blob, filename: string) {

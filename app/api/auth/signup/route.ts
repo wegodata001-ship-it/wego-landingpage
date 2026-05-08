@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createAuthToken, createAuthCookieHeader, hashPassword } from "@/lib/auth";
+import { resolveProjectKeyFromBody } from "@/lib/project-key";
 
 export async function POST(request: Request) {
   const body = await request.json();
   const email = String(body.email || "").trim().toLowerCase();
   const password = String(body.password || "").trim();
-  const projectKey = String(body.project_key || "demo").trim();
+  const projectKey = resolveProjectKeyFromBody(body as Record<string, unknown>);
 
   if (!email || !projectKey || !password) {
     return NextResponse.json(

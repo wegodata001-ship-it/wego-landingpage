@@ -123,7 +123,7 @@ export default function AdminLandingClient({ projectKey }: Props) {
         <section className="card" style={{ minHeight: 480 }}>
           <h2 className="section-title">תצוגה מקדימה חיה</h2>
           <p style={{ fontSize: "0.9rem", opacity: 0.85 }}>
-            לאחר שמירה, רעננו את ה־iframe. הדף הציבורי משתמש ב־NEXT_PUBLIC_PROJECT_KEY; ודאו שהוא תואם ל־project_key הזה כדי לראות את אותו תוכן.
+            לאחר שמירה, רעננו את ה־iframe. הדף הציבורי נטען לפי NEXT_PUBLIC_PROJECT_KEY (ואז NEXT_PUBLIC_WEGOBIZ_USER_ID אם לא הוגדר); ודאו שהערך תואם ל־project_key כדי לראות את אותו תוכן.
           </p>
           {origin ? (
             <iframe

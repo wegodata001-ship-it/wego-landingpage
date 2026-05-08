@@ -1,7 +1,12 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-const DEMO_KEY = "demo";
+/** Align seed tenant with app env — same priority as lib/project-isolation.ts */
+const DEMO_KEY =
+  process.env.SEED_PROJECT_KEY?.trim() ||
+  process.env.NEXT_PUBLIC_PROJECT_KEY?.trim() ||
+  process.env.NEXT_PUBLIC_WEGOBIZ_USER_ID?.trim() ||
+  "demo";
 
 const PACKAGES = [
   {

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { isWebhookProjectKeyAllowed } from "@/lib/project-isolation";
 
 /** Payment provider webhook — completes subscription after successful charge. */
 export async function POST(request: Request) {
@@ -12,6 +13,10 @@ export async function POST(request: Request) {
 
   if (!email || !projectKey || !packageId || !transactionId || !Number.isFinite(amount) || amount <= 0) {
     return NextResponse.json({ message: "Invalid webhook payload." }, { status: 400 });
+  }
+
+  if (!isWebhookProjectKeyAllowed(projectKey)) {
+    return NextResponse.json({ message: "Project not allowed for this deployment." }, { status: 403 });
   }
 
   const user = await prisma.user.findFirst({

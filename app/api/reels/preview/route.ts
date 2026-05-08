@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { resolveProjectKey } from "@/lib/project-key";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 3600;
@@ -139,16 +140,20 @@ function mergePrefer<V>(a: V | undefined | null, b: V | undefined | null): V | u
  */
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
+  const projectKey = resolveProjectKey({
+    project_key: searchParams.get("project_key") ?? undefined,
+    projectId: searchParams.get("projectId") ?? undefined,
+  });
   const raw = searchParams.get("url")?.trim();
   if (!raw || !raw.includes("instagram.com")) {
-    return NextResponse.json({ error: "invalid url" }, { status: 400 });
+    return NextResponse.json({ error: "invalid url", project_key: projectKey }, { status: 400 });
   }
 
   let permalink: string;
   try {
     permalink = new URL(raw).href;
   } catch {
-    return NextResponse.json({ error: "invalid url" }, { status: 400 });
+    return NextResponse.json({ error: "invalid url", project_key: projectKey }, { status: 400 });
   }
 
   const code = shortcodeFromUrl(permalink);
@@ -175,15 +180,13 @@ export async function GET(req: Request) {
     if (thumbnailUrl && videoUrl) break;
   }
 
-  return NextResponse.json(
-    {
-      thumbnailUrl: thumbnailUrl ?? null,
-      videoUrl: videoUrl ?? null,
-    },
-    {
-      headers: {
-        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
-      },
-    },
-  );
+  const res = NextResponse.json({
+    project_key: projectKey,
+    thumbnailUrl: thumbnailUrl ?? null,
+    videoUrl: videoUrl ?? null,
+  });
+  res.headers.set("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=86400");
+  res.headers.set("Vary", "project_key");
+  res.headers.set("X-Project-Key", projectKey);
+  return res;
 }

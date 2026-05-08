@@ -31,9 +31,7 @@ export function splitLandingBranches(raw: unknown): {
 export async function loadLandingBundles(projectKey: string): Promise<LandingBundles> {
   try {
     const { prisma } = await import("@/lib/prisma");
-    const row =
-      (await prisma.siteSettings.findFirst({ where: { id: projectKey } })) ??
-      (await prisma.siteSettings.findFirst({ where: { id: "default" } }));
+    const row = await prisma.siteSettings.findFirst({ where: { id: projectKey } });
 
     const lc = row?.localizedContent as Record<string, unknown> | null | undefined;
     const rawLanding = lc?.landing;
