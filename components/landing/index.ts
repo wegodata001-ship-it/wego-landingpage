@@ -1,0 +1,11 @@
+export { Navbar } from "./Navbar";
+export { Hero } from "./Hero";
+export { CoreValue } from "./CoreValue";
+export { PainSection } from "./PainSection";
+export { SolutionSection } from "./SolutionSection";
+export { HowItWorks } from "./HowItWorks";
+export { Pricing } from "./Pricing";
+export { MarketingReelsShowcase } from "./MarketingReelsShowcase";
+export { PartnersLogoStrip } from "./PartnersLogoStrip";
+export { CTA } from "./CTA";
+export { Footer } from "./Footer";

@@ -1,0 +1,147 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// --- Existing production tables (read / align only; do not drop or rename in migrations) ---
+
+model Project {
+  id             String    @id
+  category       String?
+  createdAt      DateTime?
+  description_ar String?
+  description_he String?
+  image          String?
+  isFeatured     Boolean?
+  isPublished    Boolean?
+  location       String?
+  title_ar       String?
+  title_he       String?
+  gallery        Json?
+
+  @@map("Project")
+}
+
+model Lead {
+  id          String   @id @default(cuid())
+  project_key String
+  name        String?
+  email       String?
+  phone       String?
+  message     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  ip          String?
+  source      String?
+
+  @@map("Lead")
+}
+
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String?
+  phone     String?
+  message   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ContactSubmission")
+}
+
+model SiteSettings {
+  id                        String   @id
+  businessName              String?
+  tagline                   String?
+  phoneNumber               String?
+  whatsappNumber            String?
+  email                     String?
+  address                   String?
+  heroTitle                 String?
+  heroSubtitle              String?
+  aboutTitle                String?
+  aboutDescription          String?
+  aboutSecondaryDescription String?
+  heroImageUrl              String?
+  aboutImageUrl             String?
+  localizedContent          Json?
+  updatedAt                 DateTime @updatedAt
+
+  @@map("SiteSettings")
+}
+
+// --- SaaS tables (new) ---
+
+model User {
+  id          String   @id @default(cuid())
+  project_key String
+  email       String
+  password    String
+  createdAt   DateTime @default(now())
+
+  subscriptions Subscription[]
+
+  @@unique([email, project_key])
+  @@map("users")
+}
+
+model Package {
+  id           String   @id @default(cuid())
+  project_key  String
+  name         String
+  price        Float
+  durationDays Int
+  description  String?
+  features     Json?
+
+  subscriptions    Subscription[]
+  checkoutSessions CheckoutSession[]
+
+  @@map("packages")
+}
+
+model CheckoutSession {
+  id             String    @id @default(cuid())
+  project_key    String
+  packageId      String
+  email          String?
+  status         String    @default("pending")
+  subscriptionId String?
+  createdAt      DateTime  @default(now())
+  completedAt    DateTime?
+
+  package Package @relation(fields: [packageId], references: [id])
+
+  @@index([project_key, status])
+  @@map("checkout_sessions")
+}
+
+model Subscription {
+  id          String   @id @default(cuid())
+  project_key String
+  userId      String
+  packageId   String
+  startDate   DateTime
+  endDate     DateTime
+  status      String
+
+  user    User    @relation(fields: [userId], references: [id])
+  package Package @relation(fields: [packageId], references: [id])
+
+  @@map("subscriptions")
+}
+
+model Payment {
+  id            String @id @default(cuid())
+  project_key   String
+  email         String
+  amount        Float
+  transactionId String
+  status        String
+
+  @@map("payments")
+}
