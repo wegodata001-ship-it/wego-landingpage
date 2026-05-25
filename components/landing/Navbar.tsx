@@ -8,8 +8,7 @@ import { useLandingI18n } from "@/components/i18n/LandingI18nProvider";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
-  const { t, projectKey } = useLandingI18n();
-  const q = `project_key=${encodeURIComponent(projectKey)}`;
+  const { t } = useLandingI18n();
 
   const nav = useMemo(
     () => [
@@ -42,12 +41,6 @@ export function Navbar() {
 
           <div className="lp-nav__actions">
             <LanguageSwitcher />
-            <Link href={`/login?${q}`} className="lp-btn lp-btn--ghost lp-btn--ripple lp-nav__btn-compact">
-              {t("nav.login")}
-            </Link>
-            <Link href={`/dashboard?${q}`} className="lp-btn lp-btn--gold lp-btn--ripple lp-nav__btn-compact">
-              {t("nav.dashboard")}
-            </Link>
             <button
               type="button"
               className="lp-nav__toggle"
