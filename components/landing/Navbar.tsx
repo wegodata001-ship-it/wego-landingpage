@@ -13,7 +13,7 @@ export function Navbar() {
   const nav = useMemo(
     () => [
       { href: "#core-value", label: t("nav.services") },
-      { href: "#packages", label: t("nav.packages") },
+      { href: "#systems", label: t("nav.packages") },
       { href: "#pain", label: t("nav.whyUs") },
       { href: "#contact", label: t("nav.contact") },
     ],

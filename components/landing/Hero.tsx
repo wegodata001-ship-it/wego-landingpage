@@ -69,12 +69,7 @@ export function Hero() {
               <a href="#contact" className="lp-btn lp-btn--gold lp-btn--ripple lp-cta-pulse">
                 {t("hero.ctaConsult")}
               </a>
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noreferrer"
-                className="lp-btn lp-btn--ghost lp-btn--ripple"
-              >
+              <a href="#reels" className="lp-btn lp-btn--ghost lp-btn--ripple">
                 {t("hero.ctaInstagram")}
               </a>
             </div>

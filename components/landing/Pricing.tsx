@@ -2,329 +2,140 @@
 
 import { useLandingI18n } from "@/components/i18n/LandingI18nProvider";
 import { getStringArray } from "@/lib/i18n/nested";
-import type { LandingConfig } from "@/lib/landing-config";
 import arMessages from "@/messages/ar.json";
 import heMessages from "@/messages/he.json";
 import { motion } from "framer-motion";
-import { useId, useMemo, useState } from "react";
-import type { LandingPackageDTO } from "./data";
-import { PricingCardVisual, type PricingTierVisual } from "./PricingCardVisuals";
+import { useMemo } from "react";
+import { systemCards } from "@/components/landing/systems-data";
+import { SystemCardIcon } from "@/components/landing/SystemCardIcon";
+import { buildWhatsAppLink } from "@/lib/whatsapp";
 
-function parseFeatures(features: unknown): string[] {
-  if (Array.isArray(features)) {
-    return features.filter((x): x is string => typeof x === "string");
-  }
-  return [];
-}
-
-function splitPricingTitle(title: string): { line1: string; line2: string | null } {
-  const parts = title.split(/\s*[—–]\s*/);
-  if (parts.length >= 2) {
-    return { line1: parts[0]!.trim(), line2: parts.slice(1).join(" — ").trim() };
-  }
-  return { line1: title.trim(), line2: null };
-}
-
-function splitPricingSubtitle(text: string): string[] {
-  const lines = text
-    .split(/\n/)
-    .map((s) => s.trim())
-    .filter(Boolean);
-  if (lines.length > 1) return lines;
-  const sentences = text.split(/(?<=\.)\s+/).map((s) => s.trim());
-  if (sentences.length >= 2) return sentences;
-  return [text.trim()];
-}
-
-function tierFromPackage(name: string, index: number): PricingTierVisual {
-  if (/בסיס|basic|أساس|الأساس/i.test(name)) return "basic";
-  if (/צמיחה|growth|pro|نمو|احترافي/i.test(name)) return "growth";
-  if (/חכם|premium|עסק חכם|ذكي|بريميوم|سمارت/i.test(name)) return "premium";
-  return (["basic", "growth", "premium"] as const)[index % 3]!;
-}
-
-function PremiumFeatureCheck() {
-  const gid = useId().replace(/:/g, "");
+function WhatsAppIcon() {
   return (
-    <span className="lp-pricing-premium__check" aria-hidden>
-      <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+    <svg className="lp-systems-card__wa-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    </svg>
+  );
+}
+
+function FeatureCheck() {
+  return (
+    <span className="lp-systems-card__check" aria-hidden>
+      <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
         <path
-          d="M20 6L9 17l-5-5"
-          stroke={`url(#${gid}-chk)`}
-          strokeWidth="2.4"
+          d="M16 5L8 14l-4-4"
+          stroke="currentColor"
+          strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-        <defs>
-          <linearGradient id={`${gid}-chk`} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#f5d06f" />
-            <stop offset="100%" stopColor="#60a5fa" />
-          </linearGradient>
-        </defs>
       </svg>
     </span>
   );
 }
 
-const MINI_KEYS: { icon: "lock" | "layers" | "chart" | "zap"; msgKey: string }[] = [
-  { icon: "lock", msgKey: "pricing.mini.secure" },
-  { icon: "layers", msgKey: "pricing.mini.system" },
-  { icon: "chart", msgKey: "pricing.mini.marketing" },
-  { icon: "zap", msgKey: "pricing.mini.automation" },
-];
-
-function MiniFeatIcon({ type }: { type: (typeof MINI_KEYS)[number]["icon"] }) {
-  const c = "lp-pricing-premium__mini-icon-svg";
-  switch (type) {
-    case "layers":
-      return (
-        <svg className={c} viewBox="0 0 24 24" fill="none" aria-hidden>
-          <path
-            d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      );
-    case "chart":
-      return (
-        <svg className={c} viewBox="0 0 24 24" fill="none" aria-hidden>
-          <path d="M3 3v18h18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-          <path d="M7 12l4-4 4 4 6-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      );
-    case "zap":
-      return (
-        <svg className={c} viewBox="0 0 24 24" fill="none" aria-hidden>
-          <path
-            d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      );
-    default:
-      return (
-        <svg className={c} viewBox="0 0 24 24" fill="none" aria-hidden>
-          <rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" strokeWidth="1.5" />
-          <path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        </svg>
-      );
-  }
-}
-
 const cardVariants = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 0, y: 32 },
   show: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: 0.1 + i * 0.12, duration: 0.52, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { delay: 0.08 + i * 0.1, duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
   }),
 };
 
 export function Pricing() {
-  const {
-    t,
-    locale,
-    landingConfig,
-    packages: initialPackages,
-    checkoutEnabled,
-    projectKey,
-  } = useLandingI18n();
-
-  const config: Pick<LandingConfig, "pricingTitle" | "pricingSubtitle"> = landingConfig;
-  const [checkoutId, setCheckoutId] = useState<string | null>(null);
-  const [buyError, setBuyError] = useState<string | null>(null);
-
+  const { t, locale } = useLandingI18n();
   const msgRoot = (locale === "ar" ? arMessages : heMessages) as Record<string, unknown>;
-  const trustItems = useMemo(() => getStringArray(msgRoot, "pricing.trust"), [msgRoot]);
 
-  const displayList = initialPackages.map((pkg: LandingPackageDTO) => ({
-    id: pkg.id,
-    name: pkg.name,
-    price: pkg.price,
-    features: parseFeatures(pkg.features).length
-      ? parseFeatures(pkg.features)
-      : [`${pkg.durationDays} ${t("pricing.fallbackFeatureDays")}`],
-    highlighted: /צמיחה|growth|نمو/i.test(pkg.name) || Number(pkg.price) === 299,
-    disabled: !checkoutEnabled,
-  }));
-
-  const { line1, line2 } = splitPricingTitle(config.pricingTitle);
-  const subtitleLines = splitPricingSubtitle(config.pricingSubtitle);
-  const localeTag = locale === "ar" ? "ar" : "he-IL";
-
-  async function buy(pkgId: string) {
-    if (!checkoutEnabled) return;
-    setCheckoutId(pkgId);
-    setBuyError(null);
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ packageId: pkgId, project_key: projectKey }),
-      });
-      const data = await res.json();
-      if (!res.ok || !data.redirectUrl) {
-        setBuyError(data.message ?? t("pricing.errorCheckout"));
-        setCheckoutId(null);
-        return;
-      }
-      window.location.href = data.redirectUrl as string;
-    } catch {
-      setBuyError(t("pricing.errorNetwork"));
-      setCheckoutId(null);
-    }
-  }
+  const trustItems = useMemo(() => getStringArray(msgRoot, "systems.trust"), [msgRoot]);
 
   return (
-    <section id="packages" className="lp-section lp-pricing-premium">
-      <div className="lp-pricing-premium__ambient" aria-hidden>
-        <div className="lp-pricing-premium__blob lp-pricing-premium__blob--a" />
-        <div className="lp-pricing-premium__blob lp-pricing-premium__blob--b" />
-        <div className="lp-pricing-premium__blob lp-pricing-premium__blob--c" />
-        <div className="lp-pricing-premium__streak" />
-        <div className="lp-pricing-premium__particles">
-          {Array.from({ length: 16 }).map((_, i) => (
-            <span key={i} className="lp-pricing-premium__particle" />
-          ))}
-        </div>
-        <svg className="lp-pricing-premium__arc" viewBox="0 0 1200 160" preserveAspectRatio="none" aria-hidden>
-          <path
-            d="M0,100 Q400,30 800,90 T1200,70"
-            fill="none"
-            stroke="url(#lpPricingArc)"
-            strokeWidth="1"
-            opacity="0.35"
-          />
-          <defs>
-            <linearGradient id="lpPricingArc" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="rgba(59,130,246,0)" />
-              <stop offset="45%" stopColor="rgba(96,165,250,0.45)" />
-              <stop offset="55%" stopColor="rgba(212,175,55,0.28)" />
-              <stop offset="100%" stopColor="rgba(59,130,246,0)" />
-            </linearGradient>
-          </defs>
-        </svg>
+    <section id="systems" className="lp-section lp-systems">
+      <div className="lp-systems__ambient" aria-hidden>
+        <div className="lp-systems__blob lp-systems__blob--gold" />
+        <div className="lp-systems__blob lp-systems__blob--soft" />
+        <div className="lp-systems__grid-lines" />
       </div>
 
-      <div className="lp-container lp-pricing-premium__inner">
+      <div className="lp-container lp-systems__inner">
         <motion.header
-          className="lp-pricing-premium__header"
+          className="lp-systems__header"
           initial={{ opacity: 0, y: 22 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.45 }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="lp-pricing-premium__title-block">
-            <p className="lp-pricing-premium__title-line1">{line1}</p>
-            {line2 ? <p className="lp-pricing-premium__title-line2">{line2}</p> : null}
-            <div className="lp-pricing-premium__title-glow" aria-hidden />
-          </div>
-          <div className="lp-pricing-premium__subtitle">
-            {subtitleLines.map((line, i) => (
-              <p key={`${i}-${line.slice(0, 32)}`}>{line}</p>
-            ))}
-          </div>
-          <div className="lp-pricing-premium__divider" aria-hidden />
+          <p className="lp-systems__eyebrow">{t("systems.eyebrow")}</p>
+          <h2 className="lp-systems__title">{t("systems.title")}</h2>
+          <p className="lp-systems__subtitle">{t("systems.subtitle")}</p>
+          <div className="lp-systems__divider" aria-hidden />
         </motion.header>
 
-        {buyError ? <p className="lp-pricing-premium__error">{buyError}</p> : null}
+        <div className="lp-systems__grid">
+          {systemCards.map((card, cardIndex) => {
+            const features = getStringArray(msgRoot, `systems.cards.${card.id}.features`);
+            const featured = Boolean(card.featured);
 
-        <motion.div
-          className="lp-pricing-premium__mini-row"
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.35 }}
-          transition={{ delay: 0.08, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        >
-          {MINI_KEYS.map((item) => (
-            <div key={item.msgKey} className="lp-pricing-premium__mini-item">
-              <span className="lp-pricing-premium__mini-glow" aria-hidden />
-              <MiniFeatIcon type={item.icon} />
-              <span className="lp-pricing-premium__mini-label">{t(item.msgKey)}</span>
-            </div>
-          ))}
-        </motion.div>
-
-        <div className="lp-pricing-premium__grid-wrap">
-          <div className="lp-pricing-premium__grid-glow" aria-hidden />
-          <div className="lp-pricing-premium__grid">
-            {displayList.map((pkg, cardIndex) => {
-              const tier = tierFromPackage(pkg.name, cardIndex);
-              return (
-                <motion.article
-                  key={pkg.id}
-                  className={`lp-pricing-premium-card${pkg.highlighted ? " lp-pricing-premium-card--featured" : ""}`}
-                  variants={cardVariants}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true, amount: 0.2 }}
-                  custom={cardIndex}
+            return (
+              <motion.article
+                key={card.id}
+                className={`lp-systems-card${featured ? " lp-systems-card--featured" : ""}`}
+                variants={cardVariants}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.15 }}
+                custom={cardIndex}
+              >
+                {featured ? (
+                  <div className="lp-systems-card__badge">{t("systems.badgeFeatured")}</div>
+                ) : null}
+                <div className="lp-systems-card__shine" aria-hidden />
+                <div className="lp-systems-card__icon-wrap">
+                  <div className="lp-systems-card__icon-glow" aria-hidden />
+                  <SystemCardIcon type={card.icon} />
+                </div>
+                <h3 className="lp-systems-card__name">{t(`systems.cards.${card.id}.title`)}</h3>
+                <p className="lp-systems-card__desc">{t(`systems.cards.${card.id}.description`)}</p>
+                <ul className="lp-systems-card__features">
+                  {features.map((f, i) => (
+                    <li key={`${card.id}-f-${i}`} className="lp-systems-card__feat">
+                      <FeatureCheck />
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href={buildWhatsAppLink(t(`systems.cards.${card.id}.whatsappMessage`))}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`lp-systems-card__cta lp-systems-card__cta--wa lp-btn lp-btn--ripple${
+                    featured ? " lp-btn--gold" : " lp-btn--ghost"
+                  }`}
                 >
-                  {pkg.highlighted ? (
-                    <div className="lp-pricing-premium-card__badge">
-                      <span aria-hidden>⭐</span> {t("pricing.badgePopular")}
-                    </div>
-                  ) : null}
-                  <div className="lp-pricing-premium-card__shine" aria-hidden />
-                  <div className="lp-pricing-premium-card__border-sweep" aria-hidden />
-                  <div className="lp-pricing-premium-card__visual">
-                    <div className="lp-pricing-premium-card__visual-inner">
-                      <PricingCardVisual tier={tier} className="lp-pricing-premium-card__svg" />
-                    </div>
-                    <div className="lp-pricing-premium-card__visual-glow" aria-hidden />
-                  </div>
-                  <h3 className="lp-pricing-premium-card__name">{pkg.name}</h3>
-                  <div className="lp-pricing-premium-card__price-row">
-                    <span className="lp-pricing-premium-card__currency">₪</span>
-                    <span className="lp-pricing-premium-card__amount">{pkg.price.toLocaleString(localeTag)}</span>
-                    <span className="lp-pricing-premium-card__period">{t("pricing.period")}</span>
-                  </div>
-                  <ul className="lp-pricing-premium-card__features">
-                    {pkg.features.map((f, i) => (
-                      <li key={`${pkg.id}-f-${i}`} className="lp-pricing-premium-card__feat">
-                        <PremiumFeatureCheck />
-                        <span>{f}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <button
-                    type="button"
-                    className="lp-btn lp-btn--gold lp-btn-pricing-gradient lp-pricing-premium__cta"
-                    disabled={pkg.disabled || checkoutId === pkg.id}
-                    onClick={() => void buy(pkg.id)}
-                  >
-                    <span className="lp-pricing-premium__cta-shine" aria-hidden />
-                    {checkoutId === pkg.id ? t("pricing.ctaLoading") : t("pricing.ctaBuy")}
-                  </button>
-                  <p className="lp-pricing-premium-card__footnote">
-                    {pkg.disabled ? t("pricing.footnoteDisabled") : t("pricing.footnoteEnabled")}
-                  </p>
-                </motion.article>
-              );
-            })}
-          </div>
+                  <WhatsAppIcon />
+                  <span>{featured ? t("systems.ctaStart") : t("systems.ctaContact")}</span>
+                </a>
+              </motion.article>
+            );
+          })}
         </div>
 
-        <motion.div
-          className="lp-pricing-premium__trust"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-        >
-          {trustItems.map((pillLabel) => (
-            <span key={pillLabel} className="lp-pricing-premium__trust-pill">
-              <span className="lp-pricing-premium__trust-dot" aria-hidden />
-              {pillLabel}
-            </span>
-          ))}
-        </motion.div>
+        {trustItems.length > 0 ? (
+          <motion.div
+            className="lp-systems__trust"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ delay: 0.15, duration: 0.5 }}
+          >
+            {trustItems.map((label) => (
+              <span key={label} className="lp-systems__trust-pill">
+                <span className="lp-systems__trust-dot" aria-hidden />
+                {label}
+              </span>
+            ))}
+          </motion.div>
+        ) : null}
       </div>
     </section>
   );

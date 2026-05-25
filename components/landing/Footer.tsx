@@ -26,7 +26,7 @@ export function Footer() {
             <div style={{ fontWeight: 700, marginBottom: "0.75rem" }}>{t("footer.linksTitle")}</div>
             <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "0.5rem" }}>
               <li>
-                <a href="#packages">{t("footer.packagesLink")}</a>
+                <a href="#systems">{t("footer.packagesLink")}</a>
               </li>
               <li>
                 <Link href={`/login?${q}`}>{t("nav.login")}</Link>
