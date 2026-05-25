@@ -1,9 +1,17 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { API_ROUTE_DYNAMIC, apiDisabledResponse } from "@/lib/api-db-mock";
+import { isDbDisabled } from "@/lib/db-disabled";
 import { createAuthToken, createAuthCookieHeader, hashPassword } from "@/lib/auth";
 import { resolveProjectKeyFromBody } from "@/lib/project-key";
 
+export const dynamic = API_ROUTE_DYNAMIC;
+export const revalidate = 0;
+
 export async function POST(request: Request) {
+  if (isDbDisabled()) {
+    return apiDisabledResponse("Registration is disabled while DISABLE_DB=true.");
+  }
+
   const body = await request.json();
   const email = String(body.email || "").trim().toLowerCase();
   const password = String(body.password || "").trim();
@@ -12,10 +20,11 @@ export async function POST(request: Request) {
   if (!email || !projectKey || !password) {
     return NextResponse.json(
       { message: "Email, password, and project_key are required." },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
+  const { prisma } = await import("@/lib/prisma");
   const existing = await prisma.user.findFirst({ where: { email, project_key: projectKey } });
   if (existing) {
     return NextResponse.json({ message: "A user with this email already exists in this project." }, { status: 409 });

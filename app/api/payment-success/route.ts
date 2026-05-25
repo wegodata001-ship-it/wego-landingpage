@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { API_ROUTE_DYNAMIC, apiDisabledResponse } from "@/lib/api-db-mock";
+import { isDbDisabled } from "@/lib/db-disabled";
 import { hashPassword, createAuthToken, createAuthCookieHeader } from "@/lib/auth";
+
+export const dynamic = API_ROUTE_DYNAMIC;
+export const revalidate = 0;
 
 function randomPassword(length = 10) {
   const chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -10,6 +14,10 @@ function randomPassword(length = 10) {
 }
 
 export async function POST(request: Request) {
+  if (isDbDisabled()) {
+    return apiDisabledResponse("Payment completion is disabled while DISABLE_DB=true.");
+  }
+
   const body = await request.json();
   const sessionId = String(body.sessionId ?? "").trim();
   const emailRaw = String(body.email ?? "").trim().toLowerCase();
@@ -19,6 +27,7 @@ export async function POST(request: Request) {
   }
 
   try {
+    const { prisma } = await import("@/lib/prisma");
     const session = await prisma.checkoutSession.findUnique({
       where: { id: sessionId },
       include: { package: true },
@@ -38,7 +47,7 @@ export async function POST(request: Request) {
     if (existing) {
       return NextResponse.json(
         { error: "An account with this email already exists. Please sign in instead." },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -87,7 +96,6 @@ export async function POST(request: Request) {
     });
     response.headers.set("Set-Cookie", createAuthCookieHeader(token));
 
-    // TODO: email login credentials (e.g. Resend / SMTP) — keep response body for now.
     return response;
   } catch (e) {
     console.error(e);

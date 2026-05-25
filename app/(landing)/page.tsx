@@ -21,6 +21,7 @@ import { loadLandingBundles } from "@/lib/load-landing-bundles";
 import { getActiveProjectKey } from "@/lib/project-isolation";
 import { getFallbackPackagesForSSR } from "@/components/landing/data";
 import type { LandingPackageDTO } from "@/components/landing/data";
+import { isDbDisabled } from "@/lib/db-disabled";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +31,10 @@ export const metadata: Metadata = {
 };
 
 async function loadPackagesForLanding(projectKey: string): Promise<{ packages: LandingPackageDTO[]; checkoutEnabled: boolean }> {
+  if (isDbDisabled()) {
+    return { packages: getFallbackPackagesForSSR(), checkoutEnabled: false };
+  }
+
   try {
     const { prisma } = await import("@/lib/prisma");
     const list = await prisma.package.findMany({

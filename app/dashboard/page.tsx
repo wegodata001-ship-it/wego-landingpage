@@ -1,7 +1,9 @@
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { isDbDisabled } from "@/lib/db-disabled";
 import { resolveProjectKey } from "@/lib/project-key";
+
+export const dynamic = "force-dynamic";
 
 export default async function DashboardPage({
   searchParams,
@@ -9,6 +11,21 @@ export default async function DashboardPage({
   searchParams?: { project_key?: string; projectId?: string };
 }) {
   const projectKey = resolveProjectKey(searchParams);
+
+  if (isDbDisabled()) {
+    return (
+      <main className="container">
+        <section className="card">
+          <h1 className="section-title">Dashboard</h1>
+          <p>Dashboard is temporarily unavailable (DISABLE_DB=true).</p>
+          <Link className="btn" href="/">
+            Back to landing page
+          </Link>
+        </section>
+      </main>
+    );
+  }
+
   const user = await getCurrentUser();
 
   if (!user || user.project_key !== projectKey) {
@@ -25,6 +42,7 @@ export default async function DashboardPage({
     );
   }
 
+  const { prisma } = await import("@/lib/prisma");
   const subscription = await prisma.subscription.findFirst({
     where: {
       project_key: projectKey,

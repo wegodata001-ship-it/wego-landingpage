@@ -5,6 +5,7 @@ import {
   type LandingConfig,
 } from "@/lib/landing-config";
 import { DEFAULT_LANDING_CONFIG_AR } from "@/lib/landing-defaults-ar";
+import { isDbDisabled } from "@/lib/db-disabled";
 
 export type LandingBundles = { he: LandingConfig; ar: LandingConfig };
 
@@ -29,6 +30,13 @@ export function splitLandingBranches(raw: unknown): {
 }
 
 export async function loadLandingBundles(projectKey: string): Promise<LandingBundles> {
+  if (isDbDisabled()) {
+    return {
+      he: mergeLandingConfig(undefined),
+      ar: mergeLandingConfigForLocale(undefined, DEFAULT_LANDING_CONFIG_AR),
+    };
+  }
+
   try {
     const { prisma } = await import("@/lib/prisma");
     const row = await prisma.siteSettings.findFirst({ where: { id: projectKey } });

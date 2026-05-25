@@ -1,9 +1,17 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { API_ROUTE_DYNAMIC, apiDisabledResponse } from "@/lib/api-db-mock";
+import { isDbDisabled } from "@/lib/db-disabled";
 import { isWebhookProjectKeyAllowed } from "@/lib/project-isolation";
 
 /** Payment provider webhook — completes subscription after successful charge. */
+export const dynamic = API_ROUTE_DYNAMIC;
+export const revalidate = 0;
+
 export async function POST(request: Request) {
+  if (isDbDisabled()) {
+    return apiDisabledResponse("Payment webhook is disabled while DISABLE_DB=true.");
+  }
+
   const body = await request.json();
   const email = String(body.email || "").trim().toLowerCase();
   const projectKey = String(body.project_key ?? body.projectId ?? "").trim();
@@ -19,6 +27,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "Project not allowed for this deployment." }, { status: 403 });
   }
 
+  const { prisma } = await import("@/lib/prisma");
   const user = await prisma.user.findFirst({
     where: { email, project_key: projectKey },
   });

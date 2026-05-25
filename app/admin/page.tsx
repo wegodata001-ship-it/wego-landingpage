@@ -1,7 +1,9 @@
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
 import PackageForm from "./PackageForm";
 import { resolveProjectKey } from "@/lib/project-key";
+import { isDbDisabled } from "@/lib/db-disabled";
+
+export const dynamic = "force-dynamic";
 
 export default async function AdminPage({
   searchParams,
@@ -10,6 +12,28 @@ export default async function AdminPage({
 }) {
   const projectKey = resolveProjectKey(searchParams);
 
+  if (isDbDisabled()) {
+    return (
+      <main className="container">
+        <section className="card">
+          <h1 className="section-title">Admin panel</h1>
+          <p>
+            project_key: <strong>{projectKey}</strong>
+          </p>
+          <p className="status" style={{ marginTop: "1rem" }}>
+            Admin is temporarily disabled (DISABLE_DB=true). Landing page uses static content only.
+          </p>
+          <div className="section-grid" style={{ gap: "1rem", marginTop: "1rem" }}>
+            <Link className="btn" href="/">
+              Back to landing page
+            </Link>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  const { prisma } = await import("@/lib/prisma");
   const [users, packages, subscriptions, payments] = await Promise.all([
     prisma.user.findMany({ where: { project_key: projectKey } }),
     prisma.package.findMany({ where: { project_key: projectKey }, orderBy: { name: "asc" } }),
@@ -48,7 +72,7 @@ export default async function AdminPage({
           <div className="section-grid">
             {users.map((u) => {
               const activeSubscription = subscriptions.find(
-                (s) => s.userId === u.id && s.endDate > now
+                (s) => s.userId === u.id && s.endDate > now,
               );
               return (
                 <div key={u.id} className="card">

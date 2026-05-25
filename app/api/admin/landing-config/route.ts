@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
+import { API_ROUTE_DYNAMIC, apiDisabledResponse } from "@/lib/api-db-mock";
+import { isDatabaseAvailable } from "@/lib/db-disabled";
 import { DEFAULT_LANDING_CONFIG, mergeLandingConfig, type LandingConfig } from "@/lib/landing-config";
 import { loadLandingPageConfig } from "@/lib/load-landing-page-config";
 import { getActiveProjectKey } from "@/lib/project-isolation";
 
 /** Never statically optimize — avoids DB access during `next build` collection. */
-export const dynamic = "force-dynamic";
+export const dynamic = API_ROUTE_DYNAMIC;
+export const revalidate = 0;
 export const runtime = "nodejs";
 
 function isRecord(x: unknown): x is Record<string, unknown> {
@@ -16,20 +19,16 @@ function parseBodyLanding(raw: unknown): LandingConfig | null {
   return mergeLandingConfig(raw);
 }
 
-function isDatabaseConfigured(): boolean {
-  return Boolean(process.env.DATABASE_URL?.trim());
-}
-
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const projectKey = url.searchParams.get("project_key")?.trim() || getActiveProjectKey();
 
   try {
-    if (!isDatabaseConfigured()) {
+    if (!isDatabaseAvailable()) {
       return NextResponse.json({
         project_key: projectKey,
         config: { ...DEFAULT_LANDING_CONFIG },
-        warning: "DATABASE_URL is not set; returning defaults.",
+        warning: "Database disabled or not configured; returning defaults.",
       });
     }
 
@@ -47,11 +46,8 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    if (!isDatabaseConfigured()) {
-      return NextResponse.json(
-        { message: "Database not configured (DATABASE_URL missing)." },
-        { status: 503 },
-      );
+    if (!isDatabaseAvailable()) {
+      return apiDisabledResponse("Database not available (DISABLE_DB or DATABASE_URL missing).");
     }
 
     let body: { project_key?: string; config?: unknown };

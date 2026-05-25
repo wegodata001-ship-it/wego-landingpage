@@ -1,8 +1,16 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { API_ROUTE_DYNAMIC, apiDisabledResponse } from "@/lib/api-db-mock";
+import { isDbDisabled } from "@/lib/db-disabled";
 import { resolveProjectKeyFromBody } from "@/lib/project-key";
 
+export const dynamic = API_ROUTE_DYNAMIC;
+export const revalidate = 0;
+
 export async function POST(request: Request) {
+  if (isDbDisabled()) {
+    return apiDisabledResponse("Checkout is disabled while DISABLE_DB=true.");
+  }
+
   const body = await request.json();
   const packageId = String(body.packageId ?? "").trim();
   const projectKey = resolveProjectKeyFromBody(body as Record<string, unknown>);
@@ -13,6 +21,7 @@ export async function POST(request: Request) {
   }
 
   try {
+    const { prisma } = await import("@/lib/prisma");
     const pkg = await prisma.package.findFirst({
       where: { id: packageId, project_key: projectKey },
     });

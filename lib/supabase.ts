@@ -1,15 +1,26 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { isDbDisabled } from "@/lib/db-disabled";
 import { sanitizeProjectKeyForPath } from "@/lib/project-isolation";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const bucketName = process.env.SUPABASE_STORAGE_BUCKET || "wegostorage";
 
-if (!supabaseUrl || !serviceRoleKey) {
-  throw new Error("Supabase URL and service role key must be configured in environment variables.");
+function createSupabaseAdmin(): SupabaseClient {
+  if (!supabaseUrl || !serviceRoleKey) {
+    throw new Error("Supabase URL and service role key must be configured in environment variables.");
+  }
+  return createClient(supabaseUrl, serviceRoleKey);
 }
 
-export const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
+/** No client at import time when DISABLE_DB=true (avoids build failures). */
+export const supabaseAdmin: SupabaseClient = isDbDisabled()
+  ? (new Proxy({} as SupabaseClient, {
+      get() {
+        throw new Error("[supabase] DISABLE_DB=true — storage uploads are disabled.");
+      },
+    }) as SupabaseClient)
+  : createSupabaseAdmin();
 
 export function getStoragePath(projectKey: string, filename: string) {
   const safe = sanitizeProjectKeyForPath(projectKey);
@@ -18,10 +29,12 @@ export function getStoragePath(projectKey: string, filename: string) {
 }
 
 export async function uploadProjectImage(projectKey: string, file: Blob, filename: string) {
+  if (isDbDisabled()) {
+    return "";
+  }
+
   const path = getStoragePath(projectKey, filename);
-  const { data, error } = await supabaseAdmin.storage
-    .from(bucketName)
-    .upload(path, file, { upsert: true });
+  const { error } = await supabaseAdmin.storage.from(bucketName).upload(path, file, { upsert: true });
 
   if (error) {
     throw error;

@@ -1,7 +1,10 @@
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
+import { mockPackages } from "@/components/landing/data";
+import { isDbDisabled } from "@/lib/db-disabled";
 import { resolveProjectKey } from "@/lib/project-key";
 import type { Package } from "@prisma/client";
+
+export const dynamic = "force-dynamic";
 
 function isDbMissingTable(e: unknown): boolean {
   return typeof e === "object" && e !== null && "code" in e && (e as { code: string }).code === "P2021";
@@ -22,6 +25,37 @@ export default async function LandingPageRoute({
 }) {
   const projectKey = resolveProjectKey(searchParams);
 
+  if (isDbDisabled()) {
+    return (
+      <main className="container">
+        <section className="card">
+          <h1 className="section-title">Wego Business</h1>
+          <p>Landing preview — database disabled (DISABLE_DB=true).</p>
+          <p className="status" style={{ marginTop: "0.5rem" }}>
+            Page: <code>{params.slug}</code> · project_key: <code>{projectKey}</code>
+          </p>
+          <div className="section-grid" style={{ gap: "1rem", marginTop: "1.5rem" }}>
+            {mockPackages.map((pkg) => (
+              <article key={pkg.id} className="card">
+                <h2>{pkg.name}</h2>
+                <p>
+                  Price: <strong>
+                    {pkg.currency}
+                    {pkg.price}
+                  </strong>
+                </p>
+                <Link className="btn" href="/">
+                  Back to main landing
+                </Link>
+              </article>
+            ))}
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  const { prisma } = await import("@/lib/prisma");
   const site = await prisma.siteSettings.findFirst({ where: { id: projectKey } });
 
   if (!site) {

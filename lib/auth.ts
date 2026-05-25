@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
+import { isDbDisabled } from "@/lib/db-disabled";
 import { prisma } from "./prisma";
 
 const AUTH_COOKIE = "wego_auth";
@@ -37,6 +38,8 @@ export function getAuthCookieValue() {
 }
 
 export async function getCurrentUser() {
+  if (isDbDisabled()) return null;
+
   const token = getAuthCookieValue();
   if (!token) return null;
   const payload = verifyToken(token);
