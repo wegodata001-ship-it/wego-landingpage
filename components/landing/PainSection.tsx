@@ -4,13 +4,13 @@ import { useLandingI18n } from "@/components/i18n/LandingI18nProvider";
 import { motion } from "framer-motion";
 import { ModalFeatureIcon } from "./icons";
 
-const CARD_ICONS = ["users", "wallet", "funnel", "target"] as const;
+const CARD_ICONS = ["users", "wallet", "handshake", "layers"] as const;
 
 export function PainSection() {
   const { t } = useLandingI18n();
 
   return (
-    <section id="pain" className="lp-section lp-pain-premium">
+    <section id="pain" className="lp-section lp-pain-premium lp-pain-premium--compact">
       <div className="lp-pain-bg" aria-hidden />
 
       <div className="lp-container lp-pain-grid">

@@ -24,9 +24,21 @@ export function Navbar() {
     <header className="lp-nav">
       <div className="lp-nav__shell">
         <div className="lp-container lp-nav__inner">
+          <button
+            type="button"
+            className="lp-nav__toggle"
+            aria-expanded={open}
+            aria-label={t("nav.openMenu")}
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span className="lp-nav__toggle-bar" />
+            <span className="lp-nav__toggle-bar" />
+            <span className="lp-nav__toggle-bar" />
+          </button>
+
           <Link href="/" className="lp-nav__brand">
             <Image src="/wego-logo.svg" alt="Wego Business" width={40} height={40} priority />
-            <span>
+            <span className="lp-nav__brand-text">
               Wego <span className="lp-gradient-text">Business</span>
             </span>
           </Link>
@@ -41,17 +53,6 @@ export function Navbar() {
 
           <div className="lp-nav__actions">
             <LanguageSwitcher />
-            <button
-              type="button"
-              className="lp-nav__toggle"
-              aria-expanded={open}
-              aria-label={t("nav.openMenu")}
-              onClick={() => setOpen((v) => !v)}
-            >
-              <span className="lp-nav__toggle-bar" />
-              <span className="lp-nav__toggle-bar" />
-              <span className="lp-nav__toggle-bar" />
-            </button>
           </div>
         </div>
 

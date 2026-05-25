@@ -43,8 +43,18 @@ export function Hero() {
         <div className="lp-hero__grid">
           <div className="lp-hero__copy lp-hero__reveal">
             <p className="lp-hero__eyebrow">{config.heroEyebrow}</p>
-            <h1 className="lp-hero__title">{config.heroTitle}</h1>
-            <p className="lp-hero__subtitle">{config.heroSubtitle}</p>
+            <h1 className="lp-hero__title">{config.heroTitle.split("\n").map((line, i, arr) => (
+              <span key={i}>
+                {line}
+                {i < arr.length - 1 ? <br /> : null}
+              </span>
+            ))}</h1>
+            <p className="lp-hero__subtitle">{config.heroSubtitle.split("\n").map((line, i, arr) => (
+              <span key={i}>
+                {line}
+                {i < arr.length - 1 ? <br /> : null}
+              </span>
+            ))}</p>
 
             <div className="lp-hero__stats">
               <div className="lp-hero-stat">

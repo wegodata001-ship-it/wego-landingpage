@@ -74,8 +74,9 @@ export type LandingConfig = {
 
 export const DEFAULT_LANDING_CONFIG: LandingConfig = {
   heroEyebrow: "WEGO BUSINESS",
-  heroTitle: "מערכות חכמות, שיווק מדויק וניהול עסקי שמביא תוצאות.",
-  heroSubtitle: "אנחנו בונים לך עסק שעובד — עם שליטה מלאה, סדר וצמיחה אמיתית.",
+  heroTitle: "מערכות חכמות, שיווק מדויק\nוניהול עסקי שמביא תוצאות.",
+  heroSubtitle:
+    "ייעוץ וליווי עסקי מלא במקום אחד —\nמערכות, שיווק וניהול שמסדרים את העסק בצורה חכמה.",
   heroDescription: "",
   heroStatBadges: ["+120% צמיחה", "+300 לקוחות", "4.9 דירוג"],
   heroMetricLeft: { value: 84, label: "לידים חדשים" },
@@ -120,10 +121,10 @@ export const DEFAULT_LANDING_CONFIG: LandingConfig = {
   ],
   painTitle: "מרגיש שהעסק תקוע?",
   painItems: [
-    "אין מספיק לקוחות חדשים",
-    "לא יודעים מאיפה הכסף מגיע",
-    "לידים הולכים לאיבוד",
-    "הכל מבולגן",
+    "לידים לא מגיעים בצורה קבועה",
+    "אין שליטה על הכנסות והוצאות",
+    "מחירים גבוהים וספקים לא מתאימים",
+    "הכל מפוזר במקום אחד",
   ],
   solutionTitle: "אנחנו מביאים לכם תוצאות אמיתיות",
   solutionCards: [

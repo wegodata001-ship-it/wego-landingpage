@@ -1,4 +1,5 @@
 import "@/components/landing/landing.css";
+import "@/components/landing/landing-mobile.css";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import {
@@ -14,6 +15,9 @@ import {
   SolutionSection,
   MarketingReelsShowcase,
 } from "@/components/landing";
+import { AccessibilityShell } from "@/components/accessibility/AccessibilityShell";
+import { ContactSection } from "@/components/contact/ContactSection";
+import { ContactShell } from "@/components/contact/ContactShell";
 import { LandingI18nProvider } from "@/components/i18n/LandingI18nProvider";
 import type { AppLocale } from "@/lib/i18n/types";
 import { LOCALE_COOKIE } from "@/lib/i18n/types";
@@ -84,19 +88,24 @@ export default async function LandingPage({
       packages={pricePackages}
       checkoutEnabled={checkoutEnabled}
     >
-      <Navbar />
-      <main>
-        <Hero />
-        <PartnersLogoStrip />
-        <CoreValue />
-        <PainSection />
-        <SolutionSection />
-        <HowItWorks />
-        <Pricing />
-        <MarketingReelsShowcase />
-        <CTA />
-      </main>
-      <Footer />
+      <AccessibilityShell>
+        <ContactShell>
+          <Navbar />
+          <main>
+            <Hero />
+            <PartnersLogoStrip />
+            <CoreValue />
+            <PainSection />
+            <SolutionSection />
+            <HowItWorks />
+            <Pricing />
+            <MarketingReelsShowcase />
+            <CTA />
+            <ContactSection />
+          </main>
+          <Footer />
+        </ContactShell>
+      </AccessibilityShell>
     </LandingI18nProvider>
   );
 }
