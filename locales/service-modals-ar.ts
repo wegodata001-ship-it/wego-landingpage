@@ -2,6 +2,97 @@ import type { LandingServiceIcon } from "@/lib/landing-config";
 import type { ServiceModalBody } from "@/lib/service-modal-types";
 
 export const SERVICE_MODALS_AR: Record<LandingServiceIcon, ServiceModalBody> = {
+  finance: {
+    title: "نظام المالية",
+    subtitle: "كل أموال عملك في مكان واحد",
+    description: "الإيرادات، المصاريف، المستندات والتدفق النقدي — في صورة واضحة وفي الوقت الحقيقي.",
+    featureCards: [
+      { icon: "wallet", title: "الإيرادات والمصاريف", desc: "متابعة كاملة بضغطة" },
+      { icon: "file", title: "مستندات + OCR", desc: "إدخال تلقائي للفواتير" },
+      { icon: "chart", title: "التدفق النقدي", desc: "توقع واضح للمستقبل" },
+    ],
+    ctaTitle: "وحدة المالية",
+    ctaText: "تحكم كامل بالمال — بدون إكسل",
+    ctaButton: "احجز عرضاً للنظام",
+  },
+  team: {
+    title: "إدارة الموظفين",
+    subtitle: "فريقك، منظَّم",
+    description: "الحضور، الورديات، يومية العمل والرواتب — كلها متزامنة في مكان واحد.",
+    featureCards: [
+      { icon: "users", title: "الحضور والورديات", desc: "جدولة عمل بسيطة" },
+      { icon: "dashboard", title: "يومية العمل", desc: "صورة يومية واضحة" },
+      { icon: "calculator", title: "حساب الرواتب", desc: "بدون أخطاء يدوية" },
+    ],
+    ctaTitle: "وحدة الموظفين",
+    ctaText: "فريقك متزامن ومُدار",
+    ctaButton: "احجز عرضاً للنظام",
+  },
+  diary: {
+    title: "يومية العمل",
+    subtitle: "كل يوم عمل موثَّق ومتزامن",
+    description: "توثيق الورديات والساعات والنشاط اليومي — متصل مباشرة بالموظفين والرواتب.",
+    featureCards: [
+      { icon: "dashboard", title: "توثيق يومي", desc: "ساعات وورديات لحظياً" },
+      { icon: "users", title: "متصل بالموظفين", desc: "تزامن كامل مع الفريق" },
+      { icon: "calculator", title: "أساس للرواتب", desc: "بيانات دقيقة للحساب" },
+    ],
+    ctaTitle: "وحدة يومية العمل",
+    ctaText: "كل ساعة تُحتسب — تلقائياً",
+    ctaButton: "احجز عرضاً للنظام",
+  },
+  tasks: {
+    title: "إدارة المهام",
+    subtitle: "كل مهمة — مَن، ماذا ومتى",
+    description: "إسناد الموظفين، المتابعة، التنبيهات ولوحات عمل واضحة للجميع.",
+    featureCards: [
+      { icon: "layers", title: "لوحات العمل", desc: "مسارات واضحة للعين" },
+      { icon: "users", title: "إسناد الموظفين", desc: "مسؤولية واضحة لكل مهمة" },
+      { icon: "alert", title: "التنبيهات والتذكيرات", desc: "لا شيء يضيع" },
+    ],
+    ctaTitle: "وحدة المهام",
+    ctaText: "العمل ينساب — بدون فوضى",
+    ctaButton: "احجز عرضاً للنظام",
+  },
+  inventory: {
+    title: "إدارة المخزون",
+    subtitle: "مخزون دقيق في الوقت الحقيقي",
+    description: "جرد المخزون، المنتجات والفئات — بدون مفاجآت وبدون نواقص.",
+    featureCards: [
+      { icon: "layers", title: "جرد المخزون", desc: "متابعة دقيقة ومستمرة" },
+      { icon: "dashboard", title: "إدارة المنتجات", desc: "كل صنف تحت السيطرة" },
+      { icon: "analytics", title: "تقارير المخزون", desc: "ما بيع وما نقص" },
+    ],
+    ctaTitle: "وحدة المخزون",
+    ctaText: "مخزون دقيق — هدر أقل",
+    ctaButton: "احجز عرضاً للنظام",
+  },
+  ai: {
+    title: "WEGO AI",
+    subtitle: "مساعد عملك الذكي",
+    description: "يمسح المستندات، يحلل البيانات ويُنتج التقارير — تلقائياً وفي الوقت الحقيقي.",
+    featureCards: [
+      { icon: "brain", title: "مساعد أعمال ذكي", desc: "إجابات عن أرقامك" },
+      { icon: "file", title: "مسح المستندات", desc: "تحويل تلقائي لبيانات" },
+      { icon: "analytics", title: "تحليل وتقارير", desc: "رؤى بدون عناء" },
+    ],
+    ctaTitle: "وحدة AI",
+    ctaText: "ذكاء اصطناعي يعمل من أجلك",
+    ctaButton: "احجز عرضاً للنظام",
+  },
+  crm: {
+    title: "CRM",
+    subtitle: "من الفرصة إلى العميل",
+    description: "العملاء، الفرص، المتابعة والاجتماعات — في مسار منظم لا يفوّت أي فرصة.",
+    featureCards: [
+      { icon: "funnel", title: "إدارة الفرص", desc: "مسار مبيعات واضح" },
+      { icon: "users", title: "بطاقة العميل", desc: "كل التاريخ في مكان واحد" },
+      { icon: "target", title: "المتابعة", desc: "إغلاق صفقات أكثر" },
+    ],
+    ctaTitle: "وحدة CRM",
+    ctaText: "كل عميل يحصل على اهتمام",
+    ctaButton: "احجز عرضاً للنظام",
+  },
   launch: {
     title: "نبدأ عملاً صحيحاً من الصفر",
     subtitle: "بدون أخطاء مكلفة",

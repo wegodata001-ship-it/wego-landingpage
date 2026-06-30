@@ -8,7 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { LandingServiceIcon } from "@/lib/landing-config";
 import { ModalFeatureIcon, ServiceGridIcon } from "./icons";
 
-const FALLBACK_ICONS: LandingServiceIcon[] = ["launch", "megaphone", "orbit", "partners", "ledger", "scale"];
+const FALLBACK_ICONS: LandingServiceIcon[] = ["finance", "team", "tasks", "inventory", "ai", "crm"];
 
 export function CoreValue() {
   const { locale, landingConfig: config, t } = useLandingI18n();
@@ -58,12 +58,11 @@ export function CoreValue() {
 
           <div className="lp-services-grid">
             {config.servicesItems.map((item, i) => {
-              const icon = item.icon ?? FALLBACK_ICONS[i] ?? "orbit";
-              const highlight = i === 2;
+              const icon = item.icon ?? FALLBACK_ICONS[i] ?? "finance";
               return (
                 <article
                   key={`${item.title}-${i}`}
-                  className={`lp-service-card${highlight ? " lp-service-card--highlight" : ""}`}
+                  className="lp-service-card lp-service-card--module"
                   style={{ animationDelay: `${0.07 * i}s` }}
                   onClick={() => setActiveIndex(i)}
                   role="button"

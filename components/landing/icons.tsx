@@ -154,6 +154,60 @@ const svcCommon = {
 
 export function ServiceGridIcon({ type }: { type: LandingServiceIcon }) {
   switch (type) {
+    case "finance":
+      return (
+        <svg {...svcCommon}>
+          <rect x="2" y="6" width="20" height="13" rx="2.5" />
+          <path d="M2 10h20" />
+          <circle cx="17" cy="14.5" r="1.6" />
+        </svg>
+      );
+    case "team":
+      return (
+        <svg {...svcCommon}>
+          <path d="M17 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+        </svg>
+      );
+    case "diary":
+      return (
+        <svg {...svcCommon}>
+          <rect x="3" y="5" width="18" height="16" rx="2" />
+          <path d="M3 9h18M8 3v4M16 3v4M7 13h4M7 17h7" />
+        </svg>
+      );
+    case "tasks":
+      return (
+        <svg {...svcCommon}>
+          <rect x="5" y="4" width="14" height="17" rx="2" />
+          <path d="M9 3h6v3H9z" />
+          <path d="M8.5 12l2 2 4-4" />
+        </svg>
+      );
+    case "inventory":
+      return (
+        <svg {...svcCommon}>
+          <path d="M3 7l9-4 9 4-9 4-9-4z" />
+          <path d="M3 7v10l9 4 9-4V7" />
+          <path d="M12 11v10" />
+        </svg>
+      );
+    case "ai":
+      return (
+        <svg {...svcCommon}>
+          <rect x="6" y="6" width="12" height="12" rx="3" />
+          <path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3" />
+          <circle cx="12" cy="12" r="2.2" />
+        </svg>
+      );
+    case "crm":
+      return (
+        <svg {...svcCommon}>
+          <path d="M3 5h18v11H7l-4 3V5z" />
+          <path d="M8 9h8M8 12h5" />
+        </svg>
+      );
     case "launch":
       return (
         <svg {...svcCommon}>

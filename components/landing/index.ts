@@ -1,6 +1,11 @@
 export { Navbar } from "./Navbar";
 export { Hero } from "./Hero";
 export { CoreValue } from "./CoreValue";
+export { PlatformModules } from "./PlatformModules";
+export { PlatformAdvantages } from "./PlatformAdvantages";
+export { CaseStudies } from "./CaseStudies";
+export { DashboardPreview } from "./DashboardPreview";
+export { Integrations } from "./Integrations";
 export { PainSection } from "./PainSection";
 export { SolutionSection } from "./SolutionSection";
 export { HowItWorks } from "./HowItWorks";

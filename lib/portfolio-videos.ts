@@ -16,7 +16,6 @@ export function portfolioVideoSrc(file: string): string {
 }
 
 export const PORTFOLIO_VIDEOS: PortfolioVideo[] = [
-  { id: "reel2", file: "Reel 2.mp4", titleKey: "reel2" },
   { id: "reel3", file: "Reel 3.mp4", titleKey: "reel3" },
   { id: "reel5", file: "Reel5.mp4", titleKey: "reel5" },
   { id: "reel6", file: "Reel 6.mp4", titleKey: "reel6" },

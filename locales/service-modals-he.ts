@@ -2,6 +2,97 @@ import type { LandingServiceIcon } from "@/lib/landing-config";
 import type { ServiceModalBody } from "@/lib/service-modal-types";
 
 export const SERVICE_MODALS_HE: Record<LandingServiceIcon, ServiceModalBody> = {
+  finance: {
+    title: "מערכת כספים",
+    subtitle: "כל הכסף של העסק במקום אחד",
+    description: "הכנסות, הוצאות, מסמכים ותזרים — בתמונה אחת ברורה ובזמן אמת.",
+    featureCards: [
+      { icon: "wallet", title: "הכנסות והוצאות", desc: "מעקב מלא בלחיצה אחת" },
+      { icon: "file", title: "מסמכים + OCR", desc: "קליטה אוטומטית של חשבוניות" },
+      { icon: "chart", title: "תזרים מזומנים", desc: "תחזית ברורה קדימה" },
+    ],
+    ctaTitle: "מודול כספים",
+    ctaText: "שליטה מלאה בכסף — בלי אקסלים",
+    ctaButton: "קבעו הדגמה למערכת",
+  },
+  team: {
+    title: "ניהול עובדים",
+    subtitle: "הצוות שלך, מאורגן",
+    description: "נוכחות, משמרות, יומן עבודה ושכר — הכל מסונכרן במקום אחד.",
+    featureCards: [
+      { icon: "users", title: "נוכחות ומשמרות", desc: "סידור עבודה פשוט" },
+      { icon: "dashboard", title: "יומן עבודה", desc: "תמונת מצב יומית" },
+      { icon: "calculator", title: "חישובי שכר", desc: "בלי טעויות ידניות" },
+    ],
+    ctaTitle: "מודול עובדים",
+    ctaText: "הצוות שלך מסונכרן ומנוהל",
+    ctaButton: "קבעו הדגמה למערכת",
+  },
+  diary: {
+    title: "יומן עבודה",
+    subtitle: "כל יום עבודה מתועד ומסונכרן",
+    description: "תיעוד משמרות, שעות ופעילות יומית — מחובר ישירות לעובדים ולשכר.",
+    featureCards: [
+      { icon: "dashboard", title: "תיעוד יומי", desc: "שעות ומשמרות בזמן אמת" },
+      { icon: "users", title: "מחובר לעובדים", desc: "סנכרון מלא עם הצוות" },
+      { icon: "calculator", title: "בסיס לשכר", desc: "נתונים מדויקים לחישוב" },
+    ],
+    ctaTitle: "מודול יומן עבודה",
+    ctaText: "כל שעה נספרת — אוטומטית",
+    ctaButton: "קבעו הדגמה למערכת",
+  },
+  tasks: {
+    title: "ניהול משימות",
+    subtitle: "כל משימה — מי, מה ומתי",
+    description: "שיוך עובדים, מעקב, התראות ולוחות עבודה ברורים לכל הצוות.",
+    featureCards: [
+      { icon: "layers", title: "לוחות עבודה", desc: "תהליכים ברורים לעין" },
+      { icon: "users", title: "שיוך עובדים", desc: "אחריות ברורה למשימה" },
+      { icon: "alert", title: "התראות ותזכורות", desc: "כלום לא נופל בין הכיסאות" },
+    ],
+    ctaTitle: "מודול משימות",
+    ctaText: "העבודה זורמת — בלי בלגן",
+    ctaButton: "קבעו הדגמה למערכת",
+  },
+  inventory: {
+    title: "ניהול מלאי",
+    subtitle: "מלאי מדויק בזמן אמת",
+    description: "ספירות מלאי, מוצרים וקטגוריות — בלי הפתעות ובלי חוסרים.",
+    featureCards: [
+      { icon: "layers", title: "ספירות מלאי", desc: "מעקב מדויק ושוטף" },
+      { icon: "dashboard", title: "ניהול מוצרים", desc: "כל פריט תחת שליטה" },
+      { icon: "analytics", title: "דוחות מלאי", desc: "מה נמכר ומה חסר" },
+    ],
+    ctaTitle: "מודול מלאי",
+    ctaText: "מלאי מדויק — פחות בזבוז",
+    ctaButton: "קבעו הדגמה למערכת",
+  },
+  ai: {
+    title: "WEGO AI",
+    subtitle: "העוזר העסקי החכם שלך",
+    description: "סורק מסמכים, מנתח נתונים ומפיק דוחות — אוטומטית ובזמן אמת.",
+    featureCards: [
+      { icon: "brain", title: "עוזר עסקי חכם", desc: "תשובות על המספרים שלך" },
+      { icon: "file", title: "סריקת מסמכים", desc: "המרה אוטומטית לנתונים" },
+      { icon: "analytics", title: "ניתוח ודוחות", desc: "תובנות בלי לעבוד קשה" },
+    ],
+    ctaTitle: "מודול AI",
+    ctaText: "בינה מלאכותית שעובדת בשבילך",
+    ctaButton: "קבעו הדגמה למערכת",
+  },
+  crm: {
+    title: "CRM",
+    subtitle: "מהליד ועד הלקוח",
+    description: "לקוחות, לידים, מעקב ופגישות — בצנרת מסודרת שלא מאבדת אף הזדמנות.",
+    featureCards: [
+      { icon: "funnel", title: "ניהול לידים", desc: "צנרת מכירות ברורה" },
+      { icon: "users", title: "כרטיס לקוח", desc: "כל ההיסטוריה במקום אחד" },
+      { icon: "target", title: "מעקב ופולואפ", desc: "סוגרים יותר עסקאות" },
+    ],
+    ctaTitle: "מודול CRM",
+    ctaText: "כל לקוח מקבל יחס — בלי לשכוח אף אחד",
+    ctaButton: "קבעו הדגמה למערכת",
+  },
   launch: {
     title: "פותחים עסק נכון מההתחלה",
     subtitle: "בלי טעויות שעולות כסף",

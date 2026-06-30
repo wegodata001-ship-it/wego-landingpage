@@ -83,6 +83,7 @@ function PortfolioVideoCard({
   index,
   src,
   title,
+  category,
   isActive,
   onOpen,
 }: {
@@ -90,6 +91,7 @@ function PortfolioVideoCard({
   index: number;
   src: string;
   title: string;
+  category: string;
   isActive: boolean;
   onOpen: () => void;
 }) {
@@ -151,7 +153,10 @@ function PortfolioVideoCard({
             />
           </div>
           <div className="lp-reels-card__overlay" aria-hidden />
-          <span className="lp-reels-card__badge">{title}</span>
+          <span className="lp-reels-card__cat">{category}</span>
+          <span className="lp-reels-card__meta">
+            <span className="lp-reels-card__badge">{title}</span>
+          </span>
           <span className="lp-reels-card__play-wrap" aria-hidden>
             <PlayIcon className="lp-reels-card__play" />
           </span>
@@ -294,6 +299,7 @@ export function MarketingReelsShowcase() {
                 index={i}
                 src={portfolioVideoSrc(item.file)}
                 title={t(`reels.videos.${item.titleKey}.title`)}
+                category={t(`reels.videos.${item.titleKey}.category`)}
                 isActive={i === activeIndex}
                 onOpen={() => setOpen(item)}
               />

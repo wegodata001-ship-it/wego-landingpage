@@ -3,7 +3,6 @@ import "@/components/landing/landing-mobile.css";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import {
-  CoreValue,
   CTA,
   Footer,
   Hero,
@@ -14,6 +13,11 @@ import {
   Pricing,
   SolutionSection,
   MarketingReelsShowcase,
+  PlatformModules,
+  PlatformAdvantages,
+  CaseStudies,
+  DashboardPreview,
+  Integrations,
 } from "@/components/landing";
 import { AccessibilityShell } from "@/components/accessibility/AccessibilityShell";
 import { ContactSection } from "@/components/contact/ContactSection";
@@ -93,12 +97,16 @@ export default async function LandingPage({
           <Navbar />
           <main>
             <Hero />
+            <PlatformModules />
+            <CaseStudies />
             <PartnersLogoStrip />
-            <CoreValue />
             <PainSection />
             <SolutionSection />
+            <PlatformAdvantages />
             <HowItWorks />
             <Pricing />
+            <DashboardPreview />
+            <Integrations />
             <MarketingReelsShowcase />
             <CTA />
             <ContactSection />

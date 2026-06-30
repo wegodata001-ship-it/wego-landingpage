@@ -8,6 +8,37 @@ import { motion } from "framer-motion";
 import { useId } from "react";
 
 const CONTACT_EMAIL = "wego.biz24@gmail.com";
+const CONTACT_PHONE = "972545467273";
+
+function PhoneIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
+      <path
+        d="M5 4h3l2 5-2.5 1.5a11 11 0 005 5L14 13l5 2v3a2 2 0 01-2 2A14 14 0 013 6a2 2 0 012-2z"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function ClockIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3 2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function CalendarIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M3 9h18M8 3v4M16 3v4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
 function MailIcon() {
   return (
@@ -61,6 +92,28 @@ export function ContactSection() {
             transition={{ duration: 0.55, delay: 0.08 }}
           >
             <p className="lp-contact-section__lead">{t("contact.sectionLead")}</p>
+
+            <div className="lp-contact-section__meta">
+              <div className="lp-contact-section__meta-item">
+                <span className="lp-contact-section__meta-icon" aria-hidden>
+                  <ClockIcon />
+                </span>
+                <span>
+                  <small>{t("contact.respLabel")}</small>
+                  <strong>{t("contact.respValue")}</strong>
+                </span>
+              </div>
+              <div className="lp-contact-section__meta-item">
+                <span className="lp-contact-section__meta-icon" aria-hidden>
+                  <CalendarIcon />
+                </span>
+                <span>
+                  <small>{t("contact.availLabel")}</small>
+                  <strong>{t("contact.availValue")}</strong>
+                </span>
+              </div>
+            </div>
+
             <ul className="lp-contact-section__trust">
               {trustKeys.map((key) => (
                 <li key={key}>
@@ -93,7 +146,21 @@ export function ContactSection() {
                   <strong>{t("contact.whatsappCta")}</strong>
                 </span>
               </a>
+              <a className="lp-contact-section__channel" href={`tel:+${CONTACT_PHONE}`}>
+                <span className="lp-contact-section__channel-icon">
+                  <PhoneIcon />
+                </span>
+                <span>
+                  <small>{t("contact.phoneChannelLabel")}</small>
+                  <strong dir="ltr">{t("contact.phoneDisplay")}</strong>
+                </span>
+              </a>
             </div>
+
+            <p className="lp-contact-section__reliability">
+              <span className="lp-contact-section__reliability-dot" aria-hidden />
+              {t("contact.reliability")}
+            </p>
           </motion.aside>
 
           <motion.div

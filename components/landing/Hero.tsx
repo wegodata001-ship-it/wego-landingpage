@@ -1,7 +1,11 @@
 "use client";
 
 import { useLandingI18n } from "@/components/i18n/LandingI18nProvider";
-import { useEffect, useRef, useState } from "react";
+import { getStringArray } from "@/lib/i18n/nested";
+import arMessages from "@/messages/ar.json";
+import heMessages from "@/messages/he.json";
+import { ModalFeatureIcon, type ModalFeatureIconType } from "./icons";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 function useCountUp(target: number, start = 0, durationMs = 1400) {
   const [v, setV] = useState(start);
@@ -22,17 +26,38 @@ function useCountUp(target: number, start = 0, durationMs = 1400) {
   return v;
 }
 
+const CHART_BARS = [42, 58, 49, 70, 64, 86];
+
 export function Hero() {
-  const { landingConfig: config, t } = useLandingI18n();
+  const { landingConfig: config, t, locale } = useLandingI18n();
   const clients = useCountUp(320, 0, 1200);
   const revenue = useCountUp(128, 0, 1350);
-  const returning = useCountUp(84, 0, 1200);
+  const returning = useCountUp(99, 0, 1200);
 
-  const phoneRows = [
-    { title: t("hero.phoneRows.0.title"), sub: t("hero.phoneRows.0.sub") },
-    { title: t("hero.phoneRows.1.title"), sub: t("hero.phoneRows.1.sub") },
-    { title: t("hero.phoneRows.2.title"), sub: t("hero.phoneRows.2.sub") },
-  ];
+  const msgRoot = (locale === "ar" ? arMessages : heMessages) as Record<string, unknown>;
+  const modules = useMemo(() => getStringArray(msgRoot, "hero.modules"), [msgRoot]);
+
+  const kpis = useMemo(
+    () =>
+      [0, 1, 2].map((i) => ({
+        label: t(`hero.dash.kpis.${i}.label`),
+        value: t(`hero.dash.kpis.${i}.value`),
+        delta: t(`hero.dash.kpis.${i}.delta`),
+        down: i === 1,
+      })),
+    [t],
+  );
+
+  const rows = useMemo(
+    () =>
+      [0, 1, 2].map((i) => ({
+        icon: t(`hero.dash.rows.${i}.icon`) as ModalFeatureIconType,
+        title: t(`hero.dash.rows.${i}.title`),
+        sub: t(`hero.dash.rows.${i}.sub`),
+        amount: t(`hero.dash.rows.${i}.amount`),
+      })),
+    [t],
+  );
 
   return (
     <section className="lp-hero lp-section lp-hero--premium">
@@ -56,6 +81,17 @@ export function Hero() {
               </span>
             ))}</p>
 
+            {modules.length > 0 ? (
+              <ul className="lp-hero__modules" aria-label="WEGO modules">
+                {modules.map((m, i) => (
+                  <li key={`${m}-${i}`} className="lp-hero__module-chip">
+                    <span className="lp-hero__module-dot" aria-hidden />
+                    {m}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+
             <div className="lp-hero__stats">
               <div className="lp-hero-stat">
                 <strong>+{clients}</strong>
@@ -76,52 +112,74 @@ export function Hero() {
             </div>
 
             <div className="lp-hero__ctas">
-              <a href="#contact" className="lp-btn lp-btn--gold lp-btn--ripple lp-cta-pulse">
+              <a href="#contact" className="lp-btn lp-btn--gold lp-btn--ripple lp-cta-pulse lp-btn--lg">
                 {t("hero.ctaConsult")}
               </a>
-              <a href="#reels" className="lp-btn lp-btn--ghost lp-btn--ripple">
-                {t("hero.ctaInstagram")}
+              <a href="#systems" className="lp-btn lp-btn--ghost lp-btn--ripple lp-btn--lg">
+                {t("hero.ctaWatch")}
               </a>
             </div>
           </div>
 
           <div className="lp-hero__visual lp-hero__reveal lp-hero__reveal--delayed">
-            <div className="lp-hero-phone-wrap">
-              <div className="lp-hero-phone-glow" aria-hidden />
-              <div className="lp-hero-phone">
-                <div className="lp-hero-phone__top" />
-                <div className="lp-hero-phone__screen">
-                  <div className="lp-hero-phone__heading">
-                    <span className="lp-hero-phone__dot" />
-                    <strong>{t("hero.phoneHeading")}</strong>
+            <div className="lp-hero-dash-wrap">
+              <div className="lp-hero-dash-glow" aria-hidden />
+              <div className="lp-hero-dash">
+                <div className="lp-hero-dash__bar">
+                  <span className="lp-hero-dash__dots" aria-hidden>
+                    <i /><i /><i />
+                  </span>
+                  <span className="lp-hero-dash__brand">
+                    <strong>{t("hero.dash.brand")}</strong>
+                    <small>{t("hero.dash.title")}</small>
+                  </span>
+                  <span className="lp-hero-dash__live">
+                    <span className="lp-hero-dash__live-dot" aria-hidden />
+                    {t("hero.dash.live")}
+                  </span>
+                </div>
+
+                <div className="lp-hero-dash__body">
+                  <div className="lp-hero-dash__kpis">
+                    {kpis.map((k, i) => (
+                      <div key={i} className="lp-hero-dash__kpi">
+                        <small>{k.label}</small>
+                        <strong>{k.value}</strong>
+                        <span className={`lp-hero-dash__delta${k.down ? " is-down" : ""}`}>{k.delta}</span>
+                      </div>
+                    ))}
                   </div>
-                  <div className="lp-hero-phone__list">
-                    {phoneRows.map((row, idx) => (
-                      <div
-                        key={`${row.title}-${idx}`}
-                        className={`lp-hero-phone__item${idx === 1 ? " lp-hero-phone__item--active" : ""}`}
-                      >
-                        <span className="lp-hero-phone__item-icon">
-                          {idx === 0 ? "👤" : idx === 1 ? "💬" : "📈"}
+
+                  <div className="lp-hero-dash__chart">
+                    <div className="lp-hero-dash__chart-head">
+                      <span>{t("hero.dash.chartLabel")}</span>
+                    </div>
+                    <div className="lp-hero-dash__bars" aria-hidden>
+                      {CHART_BARS.map((h, i) => (
+                        <span
+                          key={i}
+                          className={`lp-hero-dash__chart-bar${i === CHART_BARS.length - 1 ? " is-peak" : ""}`}
+                          style={{ height: `${h}%` }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="lp-hero-dash__rows">
+                    {rows.map((row, i) => (
+                      <div key={i} className="lp-hero-dash__row">
+                        <span className="lp-hero-dash__row-icon" aria-hidden>
+                          <ModalFeatureIcon type={row.icon} />
                         </span>
-                        <div>
-                          <p>{row.title}</p>
+                        <span className="lp-hero-dash__row-copy">
+                          <strong>{row.title}</strong>
                           <small>{row.sub}</small>
-                        </div>
+                        </span>
+                        <span className="lp-hero-dash__row-amount">{row.amount}</span>
                       </div>
                     ))}
                   </div>
                 </div>
-              </div>
-
-              <div className="lp-social-icon lp-social-icon--ig" aria-hidden>
-                📷
-              </div>
-              <div className="lp-social-icon lp-social-icon--wa" aria-hidden>
-                💬
-              </div>
-              <div className="lp-social-icon lp-social-icon--fb" aria-hidden>
-                f
               </div>
             </div>
 

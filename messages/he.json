@@ -1,6 +1,6 @@
 {
   "nav": {
-    "services": "שירותים",
+    "services": "מודולים",
     "packages": "מערכות",
     "whyUs": "למה אנחנו",
     "contact": "צור קשר",
@@ -18,30 +18,37 @@
   },
   "hero": {
     "stats": {
-      "clients": "לקוחות",
-      "revenue": "הכנסות",
-      "returning": "לקוחות חוזרים",
-      "growthStrong": "↑ צמיחה",
-      "growthSub": "שיפור ביצועים"
+      "clients": "עסקים מנהלים ב-WEGO",
+      "revenue": "מסמכים שעובדו",
+      "returning": "חיסכון בזמן ניהול",
+      "growthStrong": "↑ פרודוקטיביות",
+      "growthSub": "מאז המעבר למערכת"
     },
-    "ctaConsult": "קבע פגישת ייעוץ",
-    "ctaInstagram": "עקבו באינסטגרם",
-    "phoneHeading": "לידים והודעות",
-    "phoneRows": [
-      { "title": "דנה לוי", "sub": "מעוניינת בפגישת ייעוץ" },
-      { "title": "הודעת וואטסאפ", "sub": "מתי אפשר להתחיל?" },
-      { "title": "ליד חדש מאינסטגרם", "sub": "קמפיין חם — היום" }
-    ],
-    "notify": [
-      "❤️ 129 לייקים",
-      "💬 24 הודעות",
-      "📈 3 לידים חדשים"
-    ]
+    "ctaConsult": "קבעו הדגמה",
+    "ctaWatch": "צפו במערכת",
+    "modules": ["כספים", "עובדים", "משימות", "CRM", "מלאי", "AI", "יומן עבודה"],
+    "dash": {
+      "brand": "WEGO",
+      "title": "לוח בקרה",
+      "live": "מחובר",
+      "kpis": [
+        { "label": "הכנסות החודש", "value": "₪128,400", "delta": "+12%" },
+        { "label": "הוצאות", "value": "₪43,200", "delta": "-4%" },
+        { "label": "תזרים נטו", "value": "₪85,200", "delta": "+18%" }
+      ],
+      "chartLabel": "תזרים 6 חודשים",
+      "rows": [
+        { "icon": "wallet", "title": "תשלום התקבל", "sub": "חשבונית #1042 · דנה לוי", "amount": "+₪1,200" },
+        { "icon": "check", "title": "משימה הושלמה", "sub": "ספירת מלאי · מחסן ראשי", "amount": "✓" },
+        { "icon": "users", "title": "ליד חדש ב-CRM", "sub": "קמפיין אינסטגרם", "amount": "חדש" }
+      ]
+    },
+    "notify": ["✓ תשלום נקלט", "🗒️ משימה חדשה", "📈 דוח מוכן"]
   },
   "partners": {
     "eyebrow": "OUR CLIENTS",
-    "title": "שותפי ההצלחה",
-    "subtitle": "המותגים שכבר עובדים יחד עם WEGO BUSINESS",
+    "title": "עסקים שכבר עובדים עם WEGO",
+    "subtitle": "מותגים מובילים שמנהלים את העסק שלהם בפלטפורמה אחת",
     "marqueeLabel": "לוגואים של שותפים — גלילה אוטומטית"
   },
   "pain": {
@@ -72,6 +79,7 @@
     ]
   },
   "cta": {
+    "demo": "קבעו הדגמה",
     "talk": "דברו איתנו",
     "start": "התחילו עכשיו"
   },
@@ -117,10 +125,17 @@
     "sectionEyebrow": "יצירת קשר",
     "sectionTitle": "צרו קשר",
     "sectionSubtitle": "טופס קצר — נחזור אליכם תוך יום עסקים",
-    "sectionLead": "ספרו לנו על העסק. נבנה עבורכם מערכת ניהול ושיווק שמתאימה בדיוק לצרכים שלכם.",
-    "trust1": "מענה מהיר מצוות WEGO",
-    "trust2": "ללא התחייבות — שיחת היכרות",
-    "trust3": "פתרונות מותאמים לעסק שלכם",
+    "sectionLead": "ספרו לנו על העסק ונראה לכם איך WEGO מנהל את כל הפעילות במקום אחד.",
+    "trust1": "מענה אנושי מצוות WEGO",
+    "trust2": "הדגמה חיה של המערכת",
+    "trust3": "התאמה מלאה למודולים שאתם צריכים",
+    "respLabel": "זמן חזרה ממוצע",
+    "respValue": "עד שעתיים בשעות הפעילות",
+    "availLabel": "זמינות",
+    "availValue": "א׳–ה׳ · 09:00–18:00",
+    "phoneChannelLabel": "טלפון:",
+    "phoneDisplay": "054-546-7273",
+    "reliability": "נחזור אליכם עם תשובה אמיתית — בלי בוטים ובלי מענה אוטומטי.",
     "whatsappCta": "שיחה מיידית",
     "sendAnother": "שליחת הודעה נוספת",
     "whatsappPrefill": "שלום, אשמח ליצור קשר עם WEGO BUSINESS",
@@ -133,12 +148,25 @@
     }
   },
   "footer": {
-    "tagline": "ניהול עסקי, מנויים ודוחות — במקום אחד מרוכז וברור.",
+    "tagline": "מערכת אחת לניהול כל העסק — כספים, עובדים, משימות, מלאי, CRM ו-AI.",
+    "productsTitle": "המוצרים",
+    "modulesLink": "המודולים",
+    "systemsLink": "המערכות",
+    "howLink": "איך זה עובד",
+    "reelsLink": "סרטונים",
+    "legalTitle": "מידע",
+    "privacy": "מדיניות פרטיות",
+    "terms": "תנאי שימוש",
     "linksTitle": "קישורים",
     "packagesLink": "מערכות",
     "contactTitle": "יצירת קשר",
+    "contactLink": "צרו קשר",
     "emailLabel": "דוא״ל:",
-    "whatsappLabel": "וואטסאפ (דמו):",
+    "whatsappLabel": "וואטסאפ:",
+    "systemsColTitle": "מערכות",
+    "companyTitle": "החברה",
+    "about": "אודות",
+    "support": "תמיכה",
     "rights": "כל הזכויות שמורות."
   },
   "systems": {
@@ -149,7 +177,8 @@
     "cta": "דברו איתנו",
     "ctaStart": "התחילו עכשיו",
     "ctaContact": "דברו איתנו",
-    "trust": ["פלטפורמה אחת", "חוויה מקצועית", "ליווי מתמשך"],
+    "learnMore": "למד עוד על המודולים",
+    "trust": ["פלטפורמה אחת", "חוויה מקצועית", "תמיכה מתמשכת"],
     "cards": {
       "financial": {
         "title": "ניהול פיננסי",
@@ -202,20 +231,82 @@
     }
   },
   "reels": {
-    "eyebrow": "תוכן אמיתי מתוך העבודה שלנו",
-    "title": "העסקים שאנחנו מקדמים — רואים תוצאות",
-    "subtitle": "תוכן, שיווק וסרטונים אמיתיים מתוך העבודה שלנו עם עסקים.",
+    "eyebrow": "WEGO IN ACTION",
+    "title": "הכירו את WEGO בפעולה",
+    "subtitle": "הצצה אמיתית לעבודה עם עסקים שמנהלים את כל הפעילות ב-WEGO.",
     "prev": "הקודם",
     "next": "הבא",
     "region": "גלריית וידאו — גרור לגלילה",
     "close": "סגירה",
     "closeBtn": "סגור",
     "videos": {
-      "reel2": { "title": "מסעדות" },
-      "reel3": { "title": "נדל״ן" },
-      "reel5": { "title": "צילום" },
-      "reel6": { "title": "עסקים" },
-      "reel7": { "title": "תוכן" }
+      "reel2": { "title": "מסעדות", "category": "F&B" },
+      "reel3": { "title": "נדל״ן", "category": "Real Estate" },
+      "reel5": { "title": "צילום", "category": "Studio" },
+      "reel6": { "title": "עסקים", "category": "Business" },
+      "reel7": { "title": "תוכן", "category": "Content" }
+    }
+  },
+  "platform": {
+    "eyebrow": "ALL SYSTEMS",
+    "title": "כל המערכות של WEGO",
+    "subtitle": "פלטפורמה אחת — כל מודול מחובר לכל השאר. נתונים, הרשאות ואוטומציה במקום אחד.",
+    "learnMore": "למד עוד",
+    "modules": {
+      "finance": { "name": "Finance · כספים", "screen": "מערכת כספים", "caps": ["הכנסות והוצאות", "מסמכים + OCR", "תזרים מזומנים", "דוחות אוטומטיים"] },
+      "employees": { "name": "Employees · עובדים", "screen": "ניהול עובדים", "caps": ["נוכחות ומשמרות", "סידור עבודה", "חישובי שכר", "הרשאות צוות"] },
+      "diary": { "name": "Work Diary · יומן עבודה", "screen": "יומן עבודה", "caps": ["תיעוד שעות", "מחובר לעובדים", "בסיס לשכר", "דוח יומי"] },
+      "tasks": { "name": "Tasks · משימות", "screen": "ניהול משימות", "caps": ["לוחות עבודה", "שיוך עובדים", "התראות", "מעקב התקדמות"] },
+      "crm": { "name": "CRM · לקוחות", "screen": "מערכת CRM", "caps": ["ניהול לידים", "כרטיס לקוח", "פולואפ", "פגישות"] },
+      "inventory": { "name": "Inventory · מלאי", "screen": "ניהול מלאי", "caps": ["ספירות מלאי", "מוצרים", "קטגוריות", "התראות חוסר"] },
+      "ai": { "name": "WEGO AI", "screen": "WEGO AI", "caps": ["סריקת מסמכים", "ניתוח נתונים", "יצירת דוחות", "עוזר עסקי"] }
+    }
+  },
+  "advantages": {
+    "eyebrow": "WHY WEGO",
+    "title": "יתרונות הפלטפורמה",
+    "subtitle": "כל מה שצריך כדי לנהל עסק מודרני — בנוי פנימה.",
+    "items": [
+      { "icon": "layers", "title": "מערכת אחת לכל העסק", "desc": "כל המחלקות והמודולים מחוברים — בלי איים של מידע." },
+      { "icon": "dashboard", "title": "כל הנתונים במקום אחד", "desc": "תמונת מצב מלאה בזמן אמת, בלוח בקרה אחד." },
+      { "icon": "shield", "title": "הרשאות מתקדמות", "desc": "שליטה מדויקת במי רואה ומה מותר לו לעשות." },
+      { "icon": "brain", "title": "AI מובנה", "desc": "בינה מלאכותית שמנתחת, מסכמת ומפיקה דוחות." },
+      { "icon": "compass", "title": "עבודה מכל מקום", "desc": "גישה מאובטחת מהדפדפן, בכל מכשיר." },
+      { "icon": "settings", "title": "מודולים הניתנים להרחבה", "desc": "מפעילים מודולים לפי הצורך — המערכת גדלה איתכם." }
+    ]
+  },
+  "dashboardPreview": {
+    "eyebrow": "DASHBOARD",
+    "title": "כך נראית מערכת WEGO",
+    "subtitle": "לוח בקרה אחד שמרכז את כל העסק — מעבר עכבר על הנקודות כדי לגלות.",
+    "screenTitle": "WEGO · לוח בקרה",
+    "hotspots": {
+      "finance": { "title": "כספים", "desc": "תזרים, הכנסות והוצאות בזמן אמת" },
+      "tasks": { "title": "משימות", "desc": "לוחות עבודה ומעקב לכל הצוות" },
+      "employees": { "title": "עובדים", "desc": "נוכחות, משמרות ושכר" },
+      "crm": { "title": "CRM", "desc": "לידים ולקוחות בצנרת אחת" },
+      "ai": { "title": "AI", "desc": "תובנות ודוחות אוטומטיים" }
+    }
+  },
+  "integrations": {
+    "eyebrow": "INTEGRATIONS",
+    "title": "מתחבר לכל הכלים שלכם",
+    "subtitle": "WEGO עובד יחד עם הכלים שאתם כבר משתמשים בהם — וממשיך להתרחב.",
+    "soon": "בקרוב"
+  },
+  "caseStudies": {
+    "eyebrow": "CASE STUDIES",
+    "title": "עסקים שמנהלים הכל ב-WEGO",
+    "subtitle": "לא רק לוגו — מערכת חיה שעובדת כל יום.",
+    "active": "מערכת פעילה",
+    "employeesLabel": "עובדים",
+    "modulesLabel": "מודולים",
+    "resultLabel": "תוצאה",
+    "moreLabel": "ועוד עסקים רבים שכבר עובדים עם WEGO",
+    "items": {
+      "desigma": { "name": "DESIGMA", "sector": "Marketing", "employees": "12", "modules": "5", "result": "+34% יעילות תפעולית" },
+      "bianco": { "name": "BIANCO", "sector": "F&B", "employees": "20", "modules": "6", "result": "ניהול מלאי בזמן אמת" },
+      "chickano": { "name": "CHICKANO", "sector": "Fast Food", "employees": "15", "modules": "4", "result": "שליטה מלאה בתזרים" }
     }
   },
   "core": {

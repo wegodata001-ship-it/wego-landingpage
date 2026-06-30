@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { useMemo } from "react";
 import { systemCards } from "@/components/landing/systems-data";
 import { SystemCardIcon } from "@/components/landing/SystemCardIcon";
+import { SystemScreen } from "@/components/landing/SystemMockups";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
 
 function WhatsAppIcon() {
@@ -90,6 +91,9 @@ export function Pricing() {
                   <div className="lp-systems-card__badge">{t("systems.badgeFeatured")}</div>
                 ) : null}
                 <div className="lp-systems-card__shine" aria-hidden />
+                <div className="lp-systems-card__screen">
+                  <SystemScreen type={card.screen} title={t(`systems.cards.${card.id}.title`)} />
+                </div>
                 <div className="lp-systems-card__icon-wrap">
                   <div className="lp-systems-card__icon-glow" aria-hidden />
                   <SystemCardIcon type={card.icon} />
@@ -114,6 +118,9 @@ export function Pricing() {
                 >
                   <WhatsAppIcon />
                   <span>{featured ? t("systems.ctaStart") : t("systems.ctaContact")}</span>
+                </a>
+                <a href="#platform" className="lp-systems-card__learn">
+                  {t("systems.learnMore")}
                 </a>
               </motion.article>
             );
